@@ -10,7 +10,10 @@ import UIKit
 
 class ALSecondViewController: UIViewController {
     
-    weak var delegate: FetchTextDelegate?
+    typealias ReturnRoutine = (String) -> ()
+    var notifier: ReturnRoutine?
+    
+//    weak var delegate: FetchTextDelegate?
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
@@ -22,19 +25,24 @@ class ALSecondViewController: UIViewController {
     
     @IBAction func clickOnButton(_ sender: Any) {
         
-        let vc = self.navigationController?.viewControllers[0] as! ALViewController
+        let vc1 = self.navigationController?.viewControllers[0] as! ALViewController
         
         guard let text = textField.text else {
             return
         }
-        vc.loadView()
+        vc1.loadView()
         
+        /*Delegate*/
+//        self.delegate = vc
+//        self.delegate?.fetchText(text)
+       
         /*Property*/
-        
 //        vc.label.text = text
         
-        self.delegate = vc
-        self.delegate?.fetchText(text)
+        vc1.notifier = { text in
+            vc1.label.text = text
+        }
+        vc1.give(text)
         
         self.navigationController?.popToRootViewController(animated: true)
         
@@ -48,4 +56,14 @@ extension ALSecondViewController: FetchTextDelegate {
         label.text = text
     }
     
+}
+
+//Function For Closure (Get Text from VC1)
+extension ALSecondViewController {
+    
+    func give(_ text: String) {
+        if let notifier = notifier {
+            notifier(text)
+        }
+    }
 }

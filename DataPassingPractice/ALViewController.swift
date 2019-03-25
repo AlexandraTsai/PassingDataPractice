@@ -16,7 +16,8 @@ protocol FetchTextDelegate: AnyObject {
 
 class ALViewController: UIViewController {
     
-    weak var delegate: FetchTextDelegate?
+    typealias ReturnRoutine = (String) -> ()
+    var notifier: ReturnRoutine?
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
@@ -48,11 +49,18 @@ class ALViewController: UIViewController {
                 return
             }
             vc.loadView()
+            
+            /*Delegate*/
+//            self.delegate = vc
+//            self.delegate?.fetchText(text)
 
+            /*Property*/
 //            vc.label.text = text
             
-            self.delegate = vc
-            self.delegate?.fetchText(text)
+            vc.notifier = { text in
+               vc.label.text = text
+            }
+            vc.give(text)
         }
         
     }
@@ -65,4 +73,14 @@ extension ALViewController: FetchTextDelegate {
         label.text = text
     }
     
+}
+
+//Function For Closure (Get Text from VC2)
+extension ALViewController {
+    
+    func give(_ text: String) {
+        if let notifier = notifier {
+            notifier(text)
+        }
+    }
 }
