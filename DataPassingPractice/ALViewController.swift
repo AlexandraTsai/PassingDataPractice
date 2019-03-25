@@ -96,6 +96,10 @@ class ALViewController: UIViewController {
             /*KVO*/
 //            vc2.viewDidLoad()
 //            vc2.secondVCText.text = text
+            
+            /*Notification*/
+            let notificationName = Notification.Name("changeSecondText")
+            NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
         }
 
     }
@@ -110,7 +114,7 @@ extension ALViewController: FetchTextDelegate {
     
 }
 
-//Function For Closure (Get Text from VC2)
+//Closure (Get Text from VC2)
 extension ALViewController {
     
     func give(_ text: String) {
@@ -120,6 +124,7 @@ extension ALViewController {
     }
 }
 
+//Notification (Get Text from VC2)
 extension ALViewController {
     
     func createNotification() {

@@ -39,6 +39,8 @@ class ALSecondViewController: UIViewController {
             self.label.text = newValue
             
         }
+        
+        createNotification()
 
     }
     
@@ -65,7 +67,7 @@ class ALSecondViewController: UIViewController {
 //        vc1.give(text)
         
         /*KOV*/
-        vc1.firstVCText.text = text
+//        vc1.firstVCText.text = text
         
         /*Notification*/
         let notificationName = Notification.Name("changeText")
@@ -95,5 +97,24 @@ extension ALSecondViewController {
     }
 }
 
-
+//Notification (Get Text from VC2)
+extension ALSecondViewController {
+    
+    func createNotification() {
+        
+        // 註冊addObserver
+        let notificationName = Notification.Name("changeSecondText")
+        
+        NotificationCenter.default.addObserver(self, selector:
+            #selector(changeText(noti:)), name: notificationName, object: nil)
+    }
+    
+    // 收到通知後要執行的動作
+    @objc func changeText(noti: Notification) {
+        if let userInfo = noti.userInfo,
+            let newText = userInfo[NotificationInfo.newText] as? String {
+            label.text = newText
+        }
+    }
+}
 
