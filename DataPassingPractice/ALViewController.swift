@@ -17,6 +17,10 @@ class Text: NSObject {
     }
 }
 
+struct NotificationInfo {
+    static let newText = ""
+}
+
 protocol FetchTextDelegate: AnyObject {
     
     func fetchText(_ text: String)
@@ -35,19 +39,25 @@ class ALViewController: UIViewController {
     var secondVC = ALSecondViewController()
     var observation: NSKeyValueObservation?
     
+    deinit {
+        print("-------VC1 is killed--------")
+    }
+    
    override func viewDidLoad() {
         super.viewDidLoad()
 
-        //KOV
-        self.observation = firstVCText.observe(\.text, options: .new) { (text, change) in
-            
-            guard let newValue = change.newValue else {
-                return
-            }
-
-            self.label.text = newValue
-            
-        }
+        /*KVO*/
+//        self.observation = firstVCText.observe(\.text, options: .new) { (text, change) in
+//
+//            guard let newValue = change.newValue else {
+//                return
+//            }
+//
+//            self.label.text = newValue
+//
+//        }
+    
+        createNotification()
 
     }
 
@@ -84,8 +94,8 @@ class ALViewController: UIViewController {
 //            print(textInTextField)
             
             /*KVO*/
-            vc2.viewDidLoad()
-            vc2.secondVCText.text = text
+//            vc2.viewDidLoad()
+//            vc2.secondVCText.text = text
         }
 
     }
@@ -106,6 +116,26 @@ extension ALViewController {
     func give(_ text: String) {
         if let notifier = notifier {
             notifier(text)
+        }
+    }
+}
+
+extension ALViewController {
+    
+    func createNotification() {
+        
+        // 註冊addObserver
+        let notificationName = Notification.Name("changeText")
+        
+        NotificationCenter.default.addObserver(self, selector:
+            #selector(changeText(noti:)), name: notificationName, object: nil)
+    }
+    
+    // 收到通知後要執行的動作
+    @objc func changeText(noti: Notification) {
+        if let userInfo = noti.userInfo,
+            let newText = userInfo[NotificationInfo.newText] as? String {
+            label.text = newText
         }
     }
 }

@@ -21,6 +21,11 @@ class ALSecondViewController: UIViewController {
     var secondVCText = Text()
     var observation: NSKeyValueObservation?
 
+    deinit {
+        print("-------VC2 is killed--------")
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -59,12 +64,15 @@ class ALSecondViewController: UIViewController {
 //        }
 //        vc1.give(text)
         
+        /*KOV*/
         vc1.firstVCText.text = text
         
+        /*Notification*/
+        let notificationName = Notification.Name("changeText")
+        NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
+        
         self.navigationController?.popToRootViewController(animated: true)
-        
-        
-        
+       
     }
 }
 
@@ -86,3 +94,6 @@ extension ALSecondViewController {
         }
     }
 }
+
+
+
