@@ -8,6 +8,15 @@
 
 import UIKit
 
+class Text: NSObject {
+    
+    @objc dynamic var text = ""
+    
+    override init() {
+        super.init()
+    }
+}
+
 protocol FetchTextDelegate: AnyObject {
     
     func fetchText(_ text: String)
@@ -21,48 +30,64 @@ class ALViewController: UIViewController {
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
+
+    var firstVCText = Text()
+    var secondVC = ALSecondViewController()
+    var observation: NSKeyValueObservation?
     
    override func viewDidLoad() {
         super.viewDidLoad()
+
+        //KOV
+        self.observation = firstVCText.observe(\.text, options: .new) { (text, change) in
+            
+            guard let newValue = change.newValue else {
+                return
+            }
+
+            self.label.text = newValue
+            
+        }
 
     }
 
     @IBAction func clickOnButton(_ sender: Any) {
         
         performSegue(withIdentifier: "GoSecondVCSegue", sender: self)
-//            self.delegate?.fetchText(text)
-//            print(secondVC.label.text)
         
-            
-//            navigationController?.pushViewController(secondVC, animated: true)
-        
-//        }
-
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+
         if segue.identifier == "GoSecondVCSegue" {
-            let vc = segue.destination as! ALSecondViewController
+            let vc2 = segue.destination as! ALSecondViewController
 
             guard let text = textField.text else {
                 return
             }
-            vc.loadView()
-            
-            /*Delegate*/
-//            self.delegate = vc
+            vc2.loadViewIfNeeded()
+
+//            /*Delegate*/
+//            self.delegate = vc2
 //            self.delegate?.fetchText(text)
 
             /*Property*/
-//            vc.label.text = text
+//            vc2.label.text = text
+
+            /*Closure*/
+//            vc2.notifier = { text in
+//               vc2.label.text = text
+//            }
+//            vc2.give(text)
+
+//            textInTextField.text = text
+//            print(textInTextField)
             
-            vc.notifier = { text in
-               vc.label.text = text
-            }
-            vc.give(text)
+            /*KVO*/
+            vc2.viewDidLoad()
+            vc2.secondVCText.text = text
         }
-        
+
     }
 }
 

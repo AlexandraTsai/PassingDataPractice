@@ -17,9 +17,23 @@ class ALSecondViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
+    
+    var secondVCText = Text()
+    var observation: NSKeyValueObservation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //KOV
+        self.observation = secondVCText.observe(\.text, options: .new) { (text, change) in
+            
+            guard let newValue = change.newValue else {
+                return
+            }
+            
+            self.label.text = newValue
+            
+        }
 
     }
     
@@ -30,7 +44,7 @@ class ALSecondViewController: UIViewController {
         guard let text = textField.text else {
             return
         }
-        vc1.loadView()
+        vc1.loadViewIfNeeded()
         
         /*Delegate*/
 //        self.delegate = vc
@@ -39,12 +53,17 @@ class ALSecondViewController: UIViewController {
         /*Property*/
 //        vc.label.text = text
         
-        vc1.notifier = { text in
-            vc1.label.text = text
-        }
-        vc1.give(text)
+        /*Closure*/
+//        vc1.notifier = { text in
+//            vc1.label.text = text
+//        }
+//        vc1.give(text)
+        
+        vc1.firstVCText.text = text
         
         self.navigationController?.popToRootViewController(animated: true)
+        
+        
         
     }
 }
