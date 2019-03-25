@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol FetchTextDelegate {
+protocol FetchTextDelegate: AnyObject {
     
     func fetchText(_ text: String)
     
@@ -16,12 +16,8 @@ protocol FetchTextDelegate {
 
 class ALViewController: UIViewController {
     
-    var delegate: FetchTextDelegate?
-    
-//    var secondVC = UIStoryboard(name: "ALStoryboard", bundle: nil).instantiateViewController(withIdentifier: "ALSecondViewController") as! ALSecondViewController
-    
-  
-    
+    weak var delegate: FetchTextDelegate?
+
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
     
@@ -31,15 +27,6 @@ class ALViewController: UIViewController {
     }
 
     @IBAction func clickOnButton(_ sender: Any) {
-        
-//        if let secondVC = storyboard?.instantiateViewController(withIdentifier: "ALSecondViewController") as? ALSecondViewController {
-        
-//            self.delegate = secondVC
-        
-        
-        
-//           secondVC.label.text =  text
-        
         
         performSegue(withIdentifier: "GoSecondVCSegue", sender: self)
 //            self.delegate?.fetchText(text)
@@ -53,6 +40,7 @@ class ALViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "GoSecondVCSegue" {
             let vc = segue.destination as! ALSecondViewController
 
@@ -61,10 +49,20 @@ class ALViewController: UIViewController {
             }
             vc.loadView()
 
-            vc.label.text = text
+//            vc.label.text = text
             
+            self.delegate = vc
+            self.delegate?.fetchText(text)
         }
         
     }
 }
 
+extension ALViewController: FetchTextDelegate {
+    
+    func fetchText(_ text: String) {
+        
+        label.text = text
+    }
+    
+}

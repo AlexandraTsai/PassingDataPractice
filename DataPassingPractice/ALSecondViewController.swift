@@ -10,6 +10,8 @@ import UIKit
 
 class ALSecondViewController: UIViewController {
     
+    weak var delegate: FetchTextDelegate?
+    
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
 
@@ -19,6 +21,23 @@ class ALSecondViewController: UIViewController {
     }
     
     @IBAction func clickOnButton(_ sender: Any) {
+        
+        let vc = self.navigationController?.viewControllers[0] as! ALViewController
+        
+        guard let text = textField.text else {
+            return
+        }
+        vc.loadView()
+        
+        /*Property*/
+        
+//        vc.label.text = text
+        
+        self.delegate = vc
+        self.delegate?.fetchText(text)
+        
+        self.navigationController?.popToRootViewController(animated: true)
+        
     }
 }
 
