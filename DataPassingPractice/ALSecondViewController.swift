@@ -9,11 +9,12 @@
 import UIKit
 
 class ALSecondViewController: UIViewController {
+  
+     /*Closure*/
+    var text1Handler: (() -> Void)?
     
-    typealias ReturnRoutine = (String) -> ()
-    var notifier: ReturnRoutine?
-    
-//    weak var delegate: FetchTextDelegate?
+    /*Delegate*/
+    weak var delegate: FetchTextDelegate?
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
@@ -30,16 +31,17 @@ class ALSecondViewController: UIViewController {
         super.viewDidLoad()
         
         //KOV
-        self.observation = secondVCText.observe(\.text, options: .new) { (text, change) in
-            
-            guard let newValue = change.newValue else {
-                return
-            }
-            
-            self.label.text = newValue
-            
-        }
-        
+//        self.observation = secondVCText.observe(\.text, options: .new) { (text, change) in
+//
+//            guard let newValue = change.newValue else {
+//                return
+//            }
+//
+//            self.label.text = newValue
+//
+//        }
+
+        /*Notification*/
         createNotification()
 
     }
@@ -52,7 +54,7 @@ class ALSecondViewController: UIViewController {
             return
         }
         vc1.loadViewIfNeeded()
-        
+       
         /*Delegate*/
 //        self.delegate = vc
 //        self.delegate?.fetchText(text)
@@ -61,18 +63,26 @@ class ALSecondViewController: UIViewController {
 //        vc.label.text = text
         
         /*Closure*/
-//        vc1.notifier = { text in
-//            vc1.label.text = text
+//        text1Handler?() //For Page1
+        
+//        vc1.text2Handler = { [weak self] in   //For Page2
+//
+//            guard let text = vc1.textField.text else {
+//                return
+//
+//            }
+//
+//            self?.label.text = text
+//            print(text)
 //        }
-//        vc1.give(text)
         
         /*KOV*/
 //        vc1.firstVCText.text = text
         
-        /*Notification*/
+        /*Notification*/ //回傳給第一頁的 observer
         let notificationName = Notification.Name("changeText")
         NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
-        
+
         self.navigationController?.popToRootViewController(animated: true)
        
     }
@@ -87,29 +97,19 @@ extension ALSecondViewController: FetchTextDelegate {
     
 }
 
-//Function For Closure (Get Text from VC1)
-extension ALSecondViewController {
-    
-    func give(_ text: String) {
-        if let notifier = notifier {
-            notifier(text)
-        }
-    }
-}
-
 //Notification (Get Text from VC2)
 extension ALSecondViewController {
     
     func createNotification() {
         
-        // 註冊addObserver
+        // 註冊第二頁的 Observer
         let notificationName = Notification.Name("changeSecondText")
         
         NotificationCenter.default.addObserver(self, selector:
             #selector(changeText(noti:)), name: notificationName, object: nil)
     }
     
-    // 收到通知後要執行的動作
+    // Observer 收到通知後要執行的動作
     @objc func changeText(noti: Notification) {
         if let userInfo = noti.userInfo,
             let newText = userInfo[NotificationInfo.newText] as? String {

@@ -29,8 +29,7 @@ protocol FetchTextDelegate: AnyObject {
 
 class ALViewController: UIViewController {
     
-    typealias ReturnRoutine = (String) -> ()
-    var notifier: ReturnRoutine?
+    var text2Handler: (()-> Void)?
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
@@ -85,19 +84,23 @@ class ALViewController: UIViewController {
 //            vc2.label.text = text
 
             /*Closure*/
-//            vc2.notifier = { text in
-//               vc2.label.text = text
+//            text2Handler?() //For Page2
+            
+//            vc2.text1Handler = { [weak self] in  //For Page1
+//
+//                guard let text = vc2.textField.text else {
+//                    return
+//
+//                }
+//
+//                self?.label.text = text
 //            }
-//            vc2.give(text)
-
-//            textInTextField.text = text
-//            print(textInTextField)
             
             /*KVO*/
 //            vc2.viewDidLoad()
 //            vc2.secondVCText.text = text
             
-            /*Notification*/
+            /*Notification*/  //回傳給第二頁的 observer
             let notificationName = Notification.Name("changeSecondText")
             NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
         }
@@ -112,16 +115,6 @@ extension ALViewController: FetchTextDelegate {
         label.text = text
     }
     
-}
-
-//Closure (Get Text from VC2)
-extension ALViewController {
-    
-    func give(_ text: String) {
-        if let notifier = notifier {
-            notifier(text)
-        }
-    }
 }
 
 //Notification (Get Text from VC2)
