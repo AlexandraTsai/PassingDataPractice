@@ -14,18 +14,28 @@ class ALSecondViewController: UIViewController {
     var text1Handler: (() -> Void)?
     
     /*Delegate*/
+//    weak var delegate: FetchTextDelegate?
     weak var delegate: FetchTextDelegate?
-    
+
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
     
     var secondVCText = Text()
     var observation: NSKeyValueObservation?
+    
+    var vc1 : ALViewController?
 
     deinit {
-        print("-------VC2 is killed--------")
+        print("-------VC2 \(self) is killed--------")
     }
     
+    @IBAction func changeRootVCTapped(_ sender: Any) {
+        
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        let mainStoryboard = UIStoryboard(name: "ALStoryboard", bundle: nil)
+        let homeController =  mainStoryboard.instantiateViewController(withIdentifier: "ALSecondViewController") as! ALSecondViewController
+        appDelegate?.window?.rootViewController = homeController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,20 +60,22 @@ class ALSecondViewController: UIViewController {
         
         let vc1 = self.navigationController?.viewControllers[0] as! ALViewController
         
+//        vc1 =  self.navigationController?.viewControllers[0] as! ALViewController
+        
         guard let text = textField.text else {
             return
         }
         vc1.loadViewIfNeeded()
        
         /*Delegate*/
-//        self.delegate = vc
+//        self.delegate = vc1
 //        self.delegate?.fetchText(text)
        
         /*Property*/
-//        vc.label.text = text
+//        vc1.label.text = text
         
         /*Closure*/
-//        text1Handler?() //For Page1
+        text1Handler?() //For Page1
         
 //        vc1.text2Handler = { [weak self] in   //For Page2
 //
@@ -76,14 +88,14 @@ class ALSecondViewController: UIViewController {
 //            print(text)
 //        }
         
-        /*KOV*/
+        /*KVO*/
 //        vc1.firstVCText.text = text
         
         /*Notification*/ //回傳給第一頁的 observer
         let notificationName = Notification.Name("changeText")
         NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
 
-        self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popViewController(animated: true)
        
     }
 }

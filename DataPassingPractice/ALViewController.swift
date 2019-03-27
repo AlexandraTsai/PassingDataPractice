@@ -22,20 +22,24 @@ struct NotificationInfo {
 }
 
 protocol FetchTextDelegate: AnyObject {
-    
+
     func fetchText(_ text: String)
-    
+
 }
 
 class ALViewController: UIViewController {
     
     var text2Handler: (()-> Void)?
+    
+    /*Delegate*/
+    weak var delegate: FetchTextDelegate?
 
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var label: UILabel!
 
     var firstVCText = Text()
-    var secondVC = ALSecondViewController()
+    
+//    var vc2 : ALSecondViewController = UIStoryboard(name: "ALStoryboard", bundle: nil).instantiateViewController(withIdentifier: "ALSecondViewController") as! ALSecondViewController
     var observation: NSKeyValueObservation?
     
     deinit {
@@ -64,6 +68,13 @@ class ALViewController: UIViewController {
         
         performSegue(withIdentifier: "GoSecondVCSegue", sender: self)
         
+//        guard let text = textField.text else {
+//            return
+//        }
+//        vc2.loadViewIfNeeded()
+//        vc2.label.text = text
+//        self.show(vc2, sender: nil)
+//
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,6 +82,7 @@ class ALViewController: UIViewController {
         if segue.identifier == "GoSecondVCSegue" {
             let vc2 = segue.destination as! ALSecondViewController
 
+            
             guard let text = textField.text else {
                 return
             }
@@ -86,21 +98,21 @@ class ALViewController: UIViewController {
             /*Closure*/
 //            text2Handler?() //For Page2
             
-//            vc2.text1Handler = { [weak self] in  //For Page1
-//
-//                guard let text = vc2.textField.text else {
-//                    return
-//
-//                }
-//
-//                self?.label.text = text
-//            }
+            vc2.text1Handler = { [weak self] in  //For Page1
+
+                guard let text = vc2.textField.text else {
+                    return
+
+                }
+
+                self?.label.text = text
+            }
             
             /*KVO*/
 //            vc2.viewDidLoad()
 //            vc2.secondVCText.text = text
             
-            /*Notification*/  //回傳給第二頁的 observer
+           /*Notification*/  // 回傳給第二頁的 observer
             let notificationName = Notification.Name("changeSecondText")
             NotificationCenter.default.post(name: notificationName, object: nil, userInfo: [NotificationInfo.newText: text])
         }

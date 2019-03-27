@@ -99,9 +99,21 @@
                                     <action selector="clickOnButton:" destination="Jbn-TY-Ady" eventType="touchUpInside" id="q1O-1U-H1O"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iyh-fi-YRP">
+                                <rect key="frame" x="82" y="513" width="211" height="30"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Change Root View Controller">
+                                    <color key="titleColor" red="0.66422420739999999" green="0.66424006219999998" blue="0.66423153879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeRootVCTapped:" destination="a6z-6Z-GKm" eventType="touchUpInside" id="7hl-J1-axV"/>
+                                    <action selector="changeRootVCTapped:" destination="Jbn-TY-Ady" eventType="touchUpInside" id="p2d-zu-Abc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="Iyh-fi-YRP" firstAttribute="centerX" secondItem="qZt-31-vdO" secondAttribute="centerX" id="05U-aR-les"/>
                             <constraint firstItem="q2b-FK-6Zw" firstAttribute="top" secondItem="eWe-8C-fbH" secondAttribute="bottom" constant="25" id="2YF-Y2-018"/>
                             <constraint firstItem="q2b-FK-6Zw" firstAttribute="centerX" secondItem="qZt-31-vdO" secondAttribute="centerX" id="4Jy-P9-7Dq"/>
                             <constraint firstItem="GzV-Ib-kLc" firstAttribute="top" secondItem="q2b-FK-6Zw" secondAttribute="bottom" constant="25" id="790-zY-zhg"/>
@@ -111,6 +123,7 @@
                             <constraint firstItem="upb-ve-AmY" firstAttribute="trailing" secondItem="eWe-8C-fbH" secondAttribute="trailing" constant="50" id="bBJ-Mm-ydU"/>
                             <constraint firstItem="GzV-Ib-kLc" firstAttribute="centerY" secondItem="qZt-31-vdO" secondAttribute="centerY" id="k6B-DV-t2Q"/>
                             <constraint firstItem="GzV-Ib-kLc" firstAttribute="leading" secondItem="upb-ve-AmY" secondAttribute="leading" constant="100" id="nrR-79-vfm"/>
+                            <constraint firstItem="upb-ve-AmY" firstAttribute="bottom" secondItem="Iyh-fi-YRP" secondAttribute="bottom" constant="124" id="u6Z-ue-8rJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="upb-ve-AmY"/>
                     </view>
